@@ -14,4 +14,6 @@ class pgame{
       return name;
     }
 };
-int 
+int main(){
+  return 0;
+}
