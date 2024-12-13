@@ -1,39 +1,4 @@
-#include <iostream>
-#include <string>
-#include <windows.h>
-#include <conio.h>
 
-using namespace std;
-
-class player{
-private:
-    string name;
-    bool game_status = false;
-    char gender = NULL;
-    char ex = NULL;
-    char map[20][20];
-    char direction = NULL;
-    int choice = NULL;
-
-public:
-    player(): map{
-    {"###"},
-    {"###"},
-    {"###"}
-    } {};
-
-    void set_name(const string &name){
-        this->name = name;
-    }
-    string get_name(){
-        return name;
-    }
-
-    void set_gender(const char &gender){
-        this->gender = gender;
-    }
-    char get_gender(){
-        return gender;#include <iostream>
 #include <string>
 #include <windows.h>
 #include <conio.h>
