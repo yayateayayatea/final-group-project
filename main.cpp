@@ -10,6 +10,7 @@ class player{
 		int x_position;
 		int y_position;
 		int count;
+		int dont_play;
 		int check;
 		char direction[50];
 		char temp;
@@ -23,6 +24,7 @@ class player{
 			count = 0;
 			x_position = 9;
 			y_position = 0;
+			dont_play = 0;
 			direction[50] = {0};
 			temp = NULL;
 			game_status = false;
@@ -655,18 +657,57 @@ class player{
 						break;
 					}
 					
+					case 'Q':{
+						dont_play = 0;
+						do{
+							do{
+								cout << endl << "are you sure you want to return to main manu?    Your answer: ";
+								
+								direction[50] = {0};
+						        count = 0;
+						        cin.getline(direction, 50);
+						        for(int i = 0; direction[i] != '\0'; i++){
+						        	count++;
+								}
+								
+								if(count != 1){
+									cout << endl << "please enter one character only...";
+									system("pause");
+									system("cls");
+								}
+							}while(count != 1);
+								
+							direction[0] = toupper(direction[0]);
+							if(direction[0] == 'Y'){
+								cout << endl << "you will leave the game and go back to main manu" << endl;
+								system("pause");
+								dont_play = 1;
+							}else if(direction[0] == 'N'){
+								cout << endl << "game continue..." << endl;
+								system("pause");
+								break;
+							}else{
+								cout << endl << "invalid input, Y for Yes and N for No only" << endl;
+								system("pause");
+							}
+						}while(dont_play != 1);
+	
+						break;
+					}
+					
 					default:{
 						cout << endl << "invalid direction inputed" << endl;
 						system("pause");
 						break;
 					}
 				}
-			}while(temp != '+');
-			system("cls");
-			cout << "congratulation, you win the game";
-			system("pause");
-			system("cls");
-//			win();
+			}while(temp != '+' && dont_play != 1); //|| dont_play != 1
+			if(temp == '+'){
+				system("cls");
+				cout << "congratulation, you win the game";
+				system("pause");
+				system("cls");
+			}		
 		}
 		
 		int check_obstacle(){
@@ -678,54 +719,74 @@ class player{
 		
 		void move_up(){
 			temp = Map[x_position - 1][y_position];
-			check = check_obstacle();
-			if(check == 1){
-				Map[x_position - 1][y_position] = '*';
-				Map[x_position][y_position] = ' ';
-				x_position--;
-			}else{
-				cout << endl << "you cannot move into obstacles!!\t";
+			if(x_position - 1 < 0){
+				cout << endl << "you cannot move outside the boundary" << endl;
 				system("pause");
-			}
+			}else{
+				check = check_obstacle();
+				if(check == 1){
+					Map[x_position - 1][y_position] = '*';
+					Map[x_position][y_position] = ' ';
+					x_position--;
+				}else{
+					cout << endl << "you cannot move into obstacles!!\t";
+					system("pause");
+				}
+			}	
 		}
 		
 		void move_down(){
 			temp = Map[x_position + 1][y_position];
-			check = check_obstacle();
-			if(check == 1){
-				Map[x_position + 1][y_position] = '*';
-				Map[x_position][y_position] = ' ';
-				x_position++;
-			}else{
-				cout << endl << "you cannot move into obstacles!!\t";
+			if(x_position + 1 > 19){
+				cout << endl << "you cannot move outside boundary" << endl;
 				system("pause");
-			}	
+			}else{
+				check = check_obstacle();
+				if(check == 1){
+					Map[x_position + 1][y_position] = '*';
+					Map[x_position][y_position] = ' ';
+					x_position++;
+				}else{
+					cout << endl << "you cannot move into obstacles!!\t";
+					system("pause");
+				}
+			}			
 		}
 		
 		void move_left(){
 			temp = Map[x_position][y_position - 1];
-			check = check_obstacle();
-			if(check == 1){
-				Map[x_position][y_position - 1] = '*';
-				Map[x_position][y_position] = ' ';
-				y_position--;
-			}else{
-				cout << endl << "you cannot move into obstacles!!\t";
+			if(y_position - 1 < 0){
+				cout << endl << "you cannot move outside boundary" << endl;
 				system("pause");
-			}	
+			}else{
+				check = check_obstacle();
+				if(check == 1){
+					Map[x_position][y_position - 1] = '*';
+					Map[x_position][y_position] = ' ';
+					y_position--;
+				}else{
+					cout << endl << "you cannot move into obstacles!!\t";
+					system("pause");
+				}
+			}		
 		}
 		
 		void move_right(){
 			temp = Map[x_position][y_position + 1];
-			check = check_obstacle();
-			if(check == 1){
-				Map[x_position][y_position + 1] = '*';
-				Map[x_position][y_position] = ' ';
-				y_position++;
-			}else{
-				cout << endl << "you cannot move into obstacles!!\t";
+			if(y_position + 1 > 19){
+				cout << endl << "you cannot move outside boundary" << endl;
 				system("pause");
-			}	
+			}else{
+				check = check_obstacle();
+				if(check == 1){
+					Map[x_position][y_position + 1] = '*';
+					Map[x_position][y_position] = ' ';
+					y_position++;
+				}else{
+					cout << endl << "you cannot move into obstacles!!\t";
+					system("pause");
+				}
+			}		
 		}
 		
 		void scoreboard(){
@@ -782,9 +843,9 @@ int main(int argc, char** argv) {
 	
 	char choice;
 	
-	do{
-		love.banner();
+	do{		
 		do{
+			love.banner();
 			cout<<"\t\t1. Journey into our maze"<<endl;
 			cout<<"\t\t2. View Scoreboard"<<endl;
 			cout<<"\t\t3. Meet the team"<<endl;
@@ -799,8 +860,6 @@ int main(int argc, char** argv) {
 					system("pause");
 					system("cls");
 					love.game();
-					cout << endl << "testing";
-					system("pause");
 					break;
 				}
 				
@@ -837,7 +896,6 @@ int main(int argc, char** argv) {
 								count++;
 							}
 							if(count != 1){
-								cout << endl << count;
 								cout << endl << "please enter one character only " << endl;
 								system("pause");
 								system("cls");
@@ -870,9 +928,6 @@ int main(int argc, char** argv) {
 	}while(true);
 	return 0;
 }
-
-
-
 
 
 
